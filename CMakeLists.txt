@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 set(OpenCV_DIR /Users/zhaoyue/opencv/installation/OpenCV-master/lib/cmake/opencv4)
 
 find_package(OpenCV REQUIRED)
-#include_directories(/Users/zhaoyue/opencv/installation/OpenCV-master/include/opencv4)
+
 include_directories(${OpenCV_INCLUDE_DIRS})
 
 add_executable(ImageProcess main.cpp)

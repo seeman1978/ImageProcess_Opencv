@@ -7,7 +7,7 @@ set(OpenCV_DIR /Users/zhaoyue/opencv/installation/OpenCV-master/lib/cmake/opencv
 
 find_package(OpenCV REQUIRED)
 
-include_directories(${OpenCV_INCLUDE_DIRS})
+include_directories(SYSTEM ${OpenCV_INCLUDE_DIRS})
 
 add_executable(ImageProcess main.cpp)
 

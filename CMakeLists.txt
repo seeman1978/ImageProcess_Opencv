@@ -9,7 +9,8 @@ find_package(OpenCV REQUIRED)
 
 include_directories(SYSTEM ${OpenCV_INCLUDE_DIRS})
 
-add_executable(ImageProcess ErodingAndDilating.cpp)
+#add_executable(ImageProcess ErodingAndDilating.cpp)
+add_executable(ImageProcess MORPH_OPEN.cpp)
 
 # add libs you need
 set(OpenCV_LIBS opencv_core opencv_imgproc opencv_highgui opencv_imgcodecs)

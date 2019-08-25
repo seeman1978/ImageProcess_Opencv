@@ -1,21 +1,7 @@
 //
 // Created by zhaoyue on 2019/8/24.
 //
-//
-// Created by zhaoyue on 2019/8/24.
-//
 
-//
-// Created by zhaoyue on 2019/8/24.
-//
-
-//
-// Created by zhaoyue on 2019/8/24.
-//
-
-//
-// Created by zhaoyue on 2019/8/24.
-//
 
 #include <iostream>
 #include <opencv2/highgui/highgui.hpp>

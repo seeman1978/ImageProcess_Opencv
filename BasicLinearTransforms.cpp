@@ -30,7 +30,7 @@ int main(int argc, char** argv)
     cout << "-------------------------" << endl;
     cout << "* Enter the alpha value [1.0-3.0]: "; cin >> alpha;
     cout << "* Enter the beta value [0-100]: ";    cin >> beta;
-    cout << "* Enter the gamma value [0-100]: ";   cin >> gamma_;
+    cout << "* Enter the gamma value [0-1]: ";   cin >> gamma_;
     /*
     for (int y = 0; y < image.rows; ++y) {
         for (int x = 0; x < image.cols; ++x) {

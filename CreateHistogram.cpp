@@ -61,7 +61,7 @@ static void help()
 
 const char* keys =
 {
-    "{Help h || }{@image|baboon.jpg|input image file}"
+    "{help h || }{@image|baboon.jpg|input image file}"
 };
 
 int main(int argc, const char** argv)

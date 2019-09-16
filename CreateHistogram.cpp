@@ -53,3 +53,41 @@ static void updateBrightnessContrast(int /*arg*/, void*)
     imshow("histogram", histImage);
 }
 
+static void help()
+{
+    std::cout << "\nThis program demonstrates the use of calcHist() -- histogram creation.\n"
+    << "Usage: \n" << "demhist [image_name -- Defaults to baboon.jpg]" << std::endl;
+}
+
+const char* keys =
+{
+    "{Help h || }{@image|baboon.jpg|input image file}"
+};
+
+int main(int argc, const char** argv)
+{
+    CommandLineParser parser(argc, argv, keys);
+    if (parser.has("help"))
+    {
+        help();
+        return 0;
+    }
+    string inputImage = parser.get<string>(0);
+    // Load the source image . HighGUI use.
+    image = imread(samples::findFile(inputImage), IMREAD_GRAYSCALE);
+    if (image.empty())
+    {
+        std::cerr << "Cannot read image file: " << inputImage << std::endl;
+        return -1;
+    }
+    namedWindow("image", 0);
+    namedWindow("histogram", 0);
+
+    createTrackbar("brightness", "image", &_brightness, 200, updateBrightnessContrast);
+    createTrackbar("contrast", "image", &_contrast, 200, updateBrightnessContrast);
+
+    updateBrightnessContrast(0, 0);
+    waitKey();
+    return 0;
+}
+

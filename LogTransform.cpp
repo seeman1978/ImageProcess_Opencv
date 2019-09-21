@@ -24,8 +24,6 @@ int main(int argc, char** argv) {
     Mat new_image = Mat::zeros(image.size(), image.type());
     image.convertTo(new_image, CV_32F);
 
-    std::cout<<new_image<<std::endl;
-
     int c = 0;   /*< constant */
 
     cout << " Log Transforms " << endl;
@@ -34,18 +32,10 @@ int main(int argc, char** argv) {
     cin >> c;
 
     new_image.convertTo(new_image, -1, 1, 1);   //new_image = new_image + 1;
-
-    std::cout<<new_image<<std::endl;
     log(new_image, new_image);
-
-    std::cout<<new_image<<std::endl;
-
     new_image.convertTo(new_image, -1, c, 0);   //new_image = c * new_image;
 
     normalize(new_image, new_image, 0, 255, NORM_MINMAX);
-
-    std::cout<<new_image<<std::endl;
-
     convertScaleAbs(new_image, new_image);
 
     imshow("Original Image", image);

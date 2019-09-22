@@ -2,10 +2,6 @@
 // Created by zhaoyue on 2019/9/22.
 //
 
-//
-// Created by wq on 2019/9/4.
-//
-
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
 #include <iostream>

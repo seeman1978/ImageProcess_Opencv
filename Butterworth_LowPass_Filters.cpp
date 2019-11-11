@@ -1,5 +1,5 @@
 //
-// Created by zhaoyue on 2019/10/30.
+// Created by zhaoyue on 2019/11/11.
 //
 
 /// Example : apply ideal low pass filtering to input image
@@ -84,9 +84,9 @@ Mat create_spectrum_magnitude_display(Mat& complexImg, bool rearrange)
 }
 
 /******************************************************************************/
-/// create a 2-channel ideal low-pass filter with radius D
+/// create a 2-channel butterworth low-pass filter with radius D, order n
 /// (assumes pre-aollocated size of dft_Filter specifies dimensions)
-void create_ideal_lowpass_filter(Mat& dft_Filter, int D)
+void create_butterworth_lowpass_filter(Mat& dft_Filter, int D, int n)
 {
     Mat tmp = Mat(dft_Filter.rows, dft_Filter.cols, CV_32F);
     Point centre = Point(dft_Filter.rows/2, dft_Filter.cols/2);
@@ -96,7 +96,7 @@ void create_ideal_lowpass_filter(Mat& dft_Filter, int D)
     for (int i = 0; i < dft_Filter.rows; ++i) {
         for (int j = 0; j < dft_Filter.cols; ++j) {
             radius = (double)sqrt(pow((i - centre.x), 2.0) + pow((double)(j - centre.y), 2.0));
-            tmp.at<float>(i, j) = radius <= D ? 1 : 0;
+            tmp.at<float>(i, j) = (float)(1/(1+pow((double)(radius/D), (double)(2*n))));
         }
     }
     Mat toMerge [] = {tmp, tmp};
@@ -116,21 +116,22 @@ int main(int argc, char** argv)
     int N, M; /// fourier image sizes
 
     int radius = 30;				// low pass filter parameter
+    int order = 2;				// low pass filter parameter
 
     const string originalName = "Input Image (grayscale)"; // window name
     const string spectrumMagName = "Magnitude Image (log transformed)"; // window name
-    const string lowPassName = "Ideal Low Pass Filtered (grayscale)"; // window name
+    const string lowPassName = "Butterworth Low Pass Filtered (grayscale)"; // window name
     const string filterName = "Filter Image"; // window nam
 
     bool keepProcessing = true;	// loop control flag
     int  key;						// user input
     int  EVENT_LOOP_DELAY = 40;	// delay for GUI window
-                                // 40 ms equates to 1000ms/25fps = 40ms per frame
+    // 40 ms equates to 1000ms/25fps = 40ms per frame
     // if command line arguments are provided try to read image/video_name
     // otherwise default to capture from attached H/W camera
     if(( argc == 2 && (!(img = imread( argv[1], IMREAD_COLOR)).empty()))||
-            ( argc == 2 && (cap.open(argv[1]) == true )) ||
-            ( argc != 2 && (cap.open(CAMERA_INDEX) == true)))
+       ( argc == 2 && (cap.open(argv[1]) == true )) ||
+       ( argc != 2 && (cap.open(CAMERA_INDEX) == true)))
     {
         /// create window object (use flag=0 to allow resize, 1 to auto fix size)
         namedWindow(originalName, 0);
@@ -155,7 +156,7 @@ int main(int argc, char** argv)
 
         // add adjustable trackbar for low pass filter threshold parameter
         createTrackbar("Radius", lowPassName, &radius, (min(M, N) / 2));
-
+        createTrackbar("Order", lowPassName, &order, 10);
         // start main loop
         while (keepProcessing) {
             // if capture object in use (i.e. video/camera)
@@ -181,7 +182,7 @@ int main(int argc, char** argv)
             // do the DFT
             dft(complexImg, complexImg);
             filter = complexImg.clone();
-            create_ideal_lowpass_filter(filter, radius);
+            create_butterworth_lowpass_filter(filter, radius, order);
             /// apply filter
             shiftDFT(complexImg);
             mulSpectrums(complexImg, filter, complexImg, 0);

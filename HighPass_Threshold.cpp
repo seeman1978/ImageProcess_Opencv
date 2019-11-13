@@ -231,12 +231,13 @@ int main(int argc, char** argv)
             /// split into planes and extract plane 0 as output image
             split(complexImg, planes);
             normalize(planes[0], imgOutput, 0, 1, NORM_MINMAX);
-
+            Mat dst;
+            threshold( imgOutput, dst, 0.5, 1, 0 );
+            //threshold( filterOutput, dst, 0.5, 1, 3);
             /// do the same with the filter image
             split(filter, planes);
             normalize(planes[0], filterOutput, 0, 1, NORM_MINMAX);
-            Mat dst;
-            threshold( filterOutput, dst, threshold_value, max_BINARY_value,0 );
+
             // display image in window
             imshow(originalName, imgGray);
             imshow(spectrumMagName, mag);

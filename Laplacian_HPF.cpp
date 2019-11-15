@@ -60,7 +60,7 @@ void shiftDFT(Mat& imgDFT)
 /// Rearrange - perform rearrangement of DFT quadrants if true
 
 /// return value - pointer to output spectrum magnitude image scaled for user viewing
-Mat create_spectrum_magnitude_display(Mat& complexImg, bool rearrange)
+Mat create_spectrum_magnitude_display(const Mat& complexImg, bool rearrange)
 {
     Mat planes[2];
 
@@ -86,11 +86,11 @@ Mat create_spectrum_magnitude_display(Mat& complexImg, bool rearrange)
 /******************************************************************************/
 /// create a 2-channel butterworth low-pass filter with radius D, order n
 /// (assumes pre-aollocated size of dft_Filter specifies dimensions)
-void create_highpass_filter(Mat& dft_Filter, int D, int n)
+void create_highpass_filter(Mat& dft_Filter)
 {
     Mat tmp = Mat(dft_Filter.rows, dft_Filter.cols, CV_32F);
     Point centre = Point(dft_Filter.rows/2, dft_Filter.cols/2);
-    double radius;
+    double radius_pow2;
     /// based on the forumla in the IP notes (p. 130 of 2009/10 version)
     /// see also HIPR2 on-line
     for (int i = 0; i < dft_Filter.rows; ++i) {
@@ -115,17 +115,14 @@ int main(int argc, char** argv)
 
     int N, M; /// fourier image sizes
 
-    int radius = 30;				// low pass filter parameter
-    int order = 2;				// low pass filter parameter
-
     const string originalName = "Input Image (grayscale)"; // window name
     const string spectrumMagName = "Magnitude Image (log transformed)"; // window name
-    const string lowPassName = "Butterworth High Pass Filtered (grayscale)"; // window name
+    const string lowPassName = "Laplacian High Pass Filtered (grayscale)"; // window name
     const string filterName = "Filter Image"; // window nam
 
-    bool keepProcessing = true;	// loop control flag
+    bool keepProcessing = true;	    // loop control flag
     int  key;						// user input
-    int  EVENT_LOOP_DELAY = 40;	// delay for GUI window
+    int  EVENT_LOOP_DELAY = 40;	    // delay for GUI window
     // 40 ms equates to 1000ms/25fps = 40ms per frame
     // if command line arguments are provided try to read image/video_name
     // otherwise default to capture from attached H/W camera
@@ -151,12 +148,10 @@ int main(int argc, char** argv)
                 exit(0);
             }
         }
+
         M = getOptimalDFTSize(img.rows);
         N = getOptimalDFTSize(img.cols);
 
-        // add adjustable trackbar for low pass filter threshold parameter
-        createTrackbar("Radius", lowPassName, &radius, (min(M, N) / 2));
-        createTrackbar("Order", lowPassName, &order, 10);
         // start main loop
         while (keepProcessing) {
             // if capture object in use (i.e. video/camera)
@@ -174,6 +169,7 @@ int main(int argc, char** argv)
             }
             /// convert input to grayscale
             cvtColor(img, imgGray, COLOR_BGR2GRAY);
+
             /// setup the DFT images
             copyMakeBorder(imgGray, padded, 0, M-imgGray.rows, 0, N-imgGray.cols, BORDER_CONSTANT, Scalar::all(0));
             planes[0] = Mat_<float>(padded);
@@ -182,13 +178,14 @@ int main(int argc, char** argv)
             // do the DFT
             dft(complexImg, complexImg);
             filter = complexImg.clone();
-            create_butterworth_highpass_filter(filter, radius, order);
+            create_highpass_filter(filter);     //filter is H(u, v). H(u, v) = -4*pi*pi*D*D
+
             /// apply filter
             shiftDFT(complexImg);
             mulSpectrums(complexImg, filter, complexImg, 0);
             shiftDFT(complexImg);
 
-            // create magnitude spectrum for display
+            /// create magnitude spectrum for display
             mag = create_spectrum_magnitude_display(complexImg, true);
 
             /// do inverse DFT on filtered image
@@ -197,6 +194,15 @@ int main(int argc, char** argv)
             /// split into planes and extract plane 0 as output image
             split(complexImg, planes);
             normalize(planes[0], imgOutput, 0, 1, NORM_MINMAX);
+
+            /// 裁剪掉填充的部分
+            imgOutput = imgOutput( cv::Rect(0, 0, imgGray.cols, imgGray.rows) );
+
+            Mat imgGrayNorm;
+            imgGray.convertTo(imgGrayNorm, CV_32FC1);
+            normalize(imgGrayNorm, imgGrayNorm, 0, 1, NORM_MINMAX);
+            imgOutput = imgGrayNorm-imgOutput;
+            normalize(imgOutput, imgOutput, 0, 1, NORM_MINMAX);
 
             /// do the same with the filter image
             split(filter, planes);

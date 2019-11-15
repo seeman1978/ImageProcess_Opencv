@@ -179,7 +179,7 @@ int main(int argc, char** argv)
             planes[0] = Mat_<float>(padded);
             planes[1] = Mat::zeros(padded.size(), CV_32F);
             merge(planes, 2, complexImg);
-            // do the DFT
+            /// do the DFT
             dft(complexImg, complexImg);
             filter = complexImg.clone();
             create_butterworth_highpass_filter(filter, radius, order);

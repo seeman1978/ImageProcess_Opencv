@@ -231,9 +231,13 @@ int main(int argc, char** argv)
             /// split into planes and extract plane 0 as output image
             split(complexImg, planes);
             normalize(planes[0], imgOutput, 0, 1, NORM_MINMAX);
+
+            /// 裁剪掉填充的部分
+            imgOutput = imgOutput( cv::Rect(0, 0, imgGray.cols, imgGray.rows) );
+
             Mat dst;
             threshold( imgOutput, dst, 0.5, 1, 0 );
-            //threshold( filterOutput, dst, 0.5, 1, 3);
+
             /// do the same with the filter image
             split(filter, planes);
             normalize(planes[0], filterOutput, 0, 1, NORM_MINMAX);

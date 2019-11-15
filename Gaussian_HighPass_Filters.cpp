@@ -197,6 +197,9 @@ int main(int argc, char** argv)
             split(complexImg, planes);
             normalize(planes[0], imgOutput, 0, 1, NORM_MINMAX);
 
+            /// 裁剪掉填充的部分
+            imgOutput = imgOutput( cv::Rect(0, 0, imgGray.cols, imgGray.rows) );
+
             /// do the same with the filter image
             split(filter, planes);
             normalize(planes[0], filterOutput, 0, 1, NORM_MINMAX);

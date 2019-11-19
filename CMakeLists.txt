@@ -9,7 +9,7 @@ find_package(OpenCV REQUIRED)
 
 include_directories(SYSTEM ${OpenCV_INCLUDE_DIRS})
 
-add_executable(ImageProcess High_Frequency_Emphasis_Filter.cpp)
+add_executable(ImageProcess HomoFilter.cpp)
 
 # add libs you need
 set(OpenCV_LIBS opencv_core opencv_imgproc opencv_highgui opencv_imgcodecs opencv_video)

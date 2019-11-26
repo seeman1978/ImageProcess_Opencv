@@ -14,8 +14,12 @@ using namespace std;
 
 Mat image_add_border( Mat &src )
 {
-    int w=2*src.cols;
-    int h=2*src.rows;
+    //int w=2*src.cols;
+    //int h=2*src.rows;
+
+    int h = getOptimalDFTSize(src.rows);
+    int w = getOptimalDFTSize(src.cols);
+
     std::cout << "src: " << src.cols << "*" << src.rows << std::endl;
 
     cv::Mat padded;
@@ -138,6 +142,7 @@ cv::Mat notch_kernel( cv::Mat &scr, std::vector<cv::Point> &notch_pot, float D0 
     std::string name = "notch滤波器d0=" + std::to_string(D0);
     cv::Mat show;
     cv::normalize(temp[0], show, 1, 0, NORM_MINMAX);
+    namedWindow(name, 0);
     cv::imshow(name, show);
     return notch_pass;
 }
@@ -162,6 +167,7 @@ int main(int argc, char * argv[])
     Mat srcImage = cv::imread(argv[1], cv::IMREAD_GRAYSCALE);
     if( srcImage.empty() )
         return -1;
+    namedWindow("src_img", 0);
     imshow( "src_img", srcImage );
     Mat padded = image_add_border(srcImage);
     center_transform( padded );
@@ -178,8 +184,7 @@ int main(int argc, char * argv[])
     magnitude(temp[0], temp[1], aa);
     divide(aa, aa.cols*aa.rows, aa);
 
-
-    cv::namedWindow(name_win);
+    cv::namedWindow(name_win, 0);
     cv::imshow(name_win,aa);
 
     cv::setMouseCallback(name_win, on_MouseHandle, (void*)&aa);
@@ -206,17 +211,24 @@ int main(int argc, char * argv[])
     split(complexIm, temp);
     magnitude(temp[0], temp[1], aa);
     divide(aa, aa.cols*aa.rows, aa);
+    namedWindow("aa", 0);
     imshow( "aa", aa );
     cv::idft(complexIm, complexIm, DFT_INVERSE);     //idft
     cv::Mat dst_plane[2];
     cv::split(complexIm, dst_plane);
     center_transform(dst_plane[0]);
-//    center_transform(dst_plane[1]);
+//  center_transform(dst_plane[1]);
 
-//    cv::magnitude(dst_plane[0],dst_plane[1],dst_plane[0]);  //求幅值(模)
+//  cv::magnitude(dst_plane[0],dst_plane[1],dst_plane[0]);  //求幅值(模)
 
     cv::normalize(dst_plane[0], dst_plane[0], 1, 0, NORM_MINMAX);
-    imshow( "dest", dst_plane[0] );
+
+    /// 裁剪掉填充的部分
+    Mat imgOutput = dst_plane[0];
+    imgOutput = imgOutput( cv::Rect(0, 0, srcImage.cols, srcImage.rows) );
+
+    namedWindow("dest", 0);
+    imshow("dest", imgOutput);
     cv::waitKey(0);
 
     return 1;
@@ -275,6 +287,7 @@ void on_MouseHandle(int event, int x, int y, int falgs, void* param)
 
             cv::circle(image, max_loc, 10, 1);
 //            cv::imshow( "ROI", imageROI );
+            namedWindow("src", 0);
             cv::imshow( "src", image );
         }
 

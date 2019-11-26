@@ -65,11 +65,12 @@ int main(int argc, char** argv)
     // filtering (stop)
     imgOut.convertTo(imgOut, CV_8U);
     normalize(imgOut, imgOut, 0, 255, NORM_MINMAX);
-    imwrite("result.jpg", imgOut);
-    imwrite("PSD.jpg", imgPSD);
+    imshow("result.jpg", imgOut);
+    imshow("PSD.jpg", imgPSD);
     fftshift(H, H);
     normalize(H, H, 0, 255, NORM_MINMAX);
-    imwrite("filter.jpg", H);
+    imshow("filter.jpg", H);
+    cv::waitKey();
     return 0;
 }
 void fftshift(const Mat& inputImg, Mat& outputImg)

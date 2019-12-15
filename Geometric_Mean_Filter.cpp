@@ -1,0 +1,80 @@
+//
+// Created by wq on 2019/12/15.
+//
+
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+
+#include <iostream>
+
+using namespace cv;
+
+void GeometricMeanFilter(const Mat& input, const Size& inputSize, Mat& output)
+{
+    double power = 1.0 / (inputSize.width*inputSize.height), geo = 1.0;
+
+    for (int y = 0; y < input.rows; ++y) {
+        for (int x = 0; x < input.cols; ++x) {
+            for (int c = 0; c < input.channels(); ++c) {    //必须有channel，否则目标图像只有原图像的三分之一
+                if (y == 0 || x == 0 || y == input.rows-1 || x == input.cols - 1){
+                    output.at<Vec3b>(y, x)[c] = input.at<Vec3b>(y, x)[c];
+                } else{
+                    if (input.at<Vec3b>(y, x)[c] != 0) {
+                        geo = geo * input.at<Vec3b>(y, x)[c];
+                    }
+                    if (input.at<Vec3b>(y+1, x+1)[c] != 0) {
+                        geo = geo * input.at<Vec3b>(y+1, x+1)[c];
+                    }
+                    if (input.at<Vec3b>(y+1, x)[c] != 0) {
+                        geo = geo * input.at<Vec3b>(y+1, x)[c];
+                    }
+                    if (input.at<Vec3b>(y, x+1)[c] != 0) {
+                        geo = geo * input.at<Vec3b>(y, x+1)[c];
+                    }
+                    if (input.at<Vec3b>(y+1, x-1)[c] != 0) {
+                        geo = geo * input.at<Vec3b>(y+1, x-1)[c];
+                    }
+                    if (input.at<Vec3b>(y-1, x+1)[c] != 0) {
+                        geo = geo * input.at<Vec3b>(y-1, x+1)[c];
+                    }
+                    if (input.at<Vec3b>(y-1, x)[c] != 0) {
+                        geo = geo * input.at<Vec3b>(y-1, x)[c];
+                    }
+                    if (input.at<Vec3b>(y, x-1)[c] != 0) {
+                        geo = geo * input.at<Vec3b>(y, x-1)[c];
+                    }
+                    if (input.at<Vec3b>(y-1, x-1)[c] != 0) {
+                        geo = geo * input.at<Vec3b>(y-1, x-1)[c];
+                    }
+                    output.at<Vec3b>(y, x)[c] = saturate_cast<uchar>(pow(geo, power));
+                    geo = 1;
+                }
+            }
+        }
+    }
+}
+
+int  main(int argc, char** argv)
+{
+    CommandLineParser parser(argc, argv, "{@input | ../data/lena.jpg | input image}");
+    Mat image = imread(parser.get<String>("@input"));
+    if (image.empty())
+    {
+        std::cout << "Could not open or find the image!\n" << std::endl;
+        std::cout << "Usage: " << argv[0] << " <Input image>" << std::endl;
+        return -1;
+    }
+
+    namedWindow("Original", 0);
+    namedWindow("Geometric Mean Filter", 0);
+
+    Mat meanImg = Mat::zeros(image.size(), image.type());
+    GeometricMeanFilter(image, Size(3, 3), meanImg);
+
+    imshow("Original", image);
+    imshow("Geometric Mean Filter", meanImg);
+
+    waitKey();
+    return 0;
+}

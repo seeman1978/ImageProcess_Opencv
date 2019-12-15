@@ -198,7 +198,7 @@ int main(int argc, char** argv)
             cvtColor(img, frame_log, COLOR_BGR2GRAY);
             frame_log.convertTo(frame_log, CV_32F);
             /*Take the natural log of the input (compute log(1 + Mag)*/
-            frame_log += 1;
+            frame_log += 0.000001;
             log( frame_log, imgGray); // log(1 + Mag)
 
             /// setup the DFT images
@@ -210,7 +210,7 @@ int main(int argc, char** argv)
             dft(complexImg, complexImg);
             filter = complexImg.clone();
             //create_gaussian_highpass_filter(filter, radius);
-            create_gaussian_highpass_filter_2(filter, H, L, C, radius);
+            create_gaussian_highpass_filter(filter, radius);
 
             /// apply filter
             shiftDFT(complexImg);
@@ -221,17 +221,19 @@ int main(int argc, char** argv)
             mag = create_spectrum_magnitude_display(complexImg, true);
 
             /// do inverse DFT on filtered image
-            idft(complexImg, complexImg);
-            //exp(complexImg, complexImg);
-            /// split into planes and extract plane 0 as output image
-            split(complexImg, planes);
-            exp(planes[0], imgOutput);
-            imgOutput -= 1;
+            double minVal,maxVal;
+            Mat inverseTransform, dest;
+            idft(complexImg, inverseTransform, DFT_SCALE|DFT_REAL_OUTPUT);
+            minMaxLoc(inverseTransform, &minVal, &maxVal);
+
+            cv::normalize(inverseTransform, inverseTransform, 0, 6, NORM_MINMAX);
+            std::cout << inverseTransform << std::endl;
+            cv::exp(inverseTransform, imgOutput);
             std::cout << imgOutput << std::endl;
-            normalize(imgOutput, imgOutput, 0, 1, NORM_MINMAX);
+            cv::normalize(imgOutput, imgOutput, 100,255, NORM_MINMAX);
 
             /// 裁剪掉填充的部分
-            imgOutput = imgOutput(cv::Rect(0, 0, imgGray.cols, imgGray.rows));
+            imgOutput = imgOutput( cv::Rect(0, 0, imgGray.cols, imgGray.rows) );
 
             /// do the same with the filter image
             split(filter, planes);

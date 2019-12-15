@@ -10,9 +10,9 @@
 
 using namespace cv;
 
-void GeometricMeanFilter(const Mat& input, const Size& inputSize, Mat& output)
+void GeometricMeanFilter(const Mat& input, Mat& output)
 {
-    double power = 1.0 / (inputSize.width*inputSize.height), geo = 1.0;
+    double power = 1.0 / 9.0, geo = 1.0;
 
     for (int y = 0; y < input.rows; ++y) {
         for (int x = 0; x < input.cols; ++x) {
@@ -66,14 +66,20 @@ int  main(int argc, char** argv)
         return -1;
     }
 
-    namedWindow("Original", 0);
+    namedWindow("Gaussian Noise", 0);
+    namedWindow("Arithmetric Mean Filter", 0);
     namedWindow("Geometric Mean Filter", 0);
 
-    Mat meanImg = Mat::zeros(image.size(), image.type());
-    GeometricMeanFilter(image, Size(3, 3), meanImg);
 
-    imshow("Original", image);
-    imshow("Geometric Mean Filter", meanImg);
+    Mat GeoMeanImg = Mat::zeros(image.size(), image.type());   //几何均值滤波后的图像
+    GeometricMeanFilter(image, GeoMeanImg);
+
+    Mat ArthMeanImg;    //算术均值滤波后的图像
+    blur(image, ArthMeanImg, Size(3, 3));
+
+    imshow("Gaussian Noise", image);
+    imshow("Arithmetric Mean Filter", ArthMeanImg);
+    imshow("Geometric Mean Filter", GeoMeanImg);
 
     waitKey();
     return 0;

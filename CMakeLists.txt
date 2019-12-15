@@ -3,7 +3,7 @@ project(ImageProcess)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
-set(OpenCV_DIR /home/wq/C++/opencv/installation/OpenCV-master/lib/cmake/opencv4)
+set(OpenCV_DIR /Users/zhaoyue/opencv/installation/OpenCV-master/lib/cmake/opencv4)
 
 find_package(OpenCV REQUIRED)
 

@@ -25,7 +25,7 @@ double filter_har(const Mat& src)
     return (src.cols*src.rows)/har;
 }
 
-void HarmonicMeanFilter(const Mat& input, const Size& kernalSize, Mat& output)
+void HarmonicMeanFilter(const Mat& input, const Size kernalSize, Mat& output)
 {
     std::vector<cv::Mat> rgbChannels(input.channels());
     split(input, rgbChannels);

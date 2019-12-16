@@ -25,7 +25,7 @@ double filter_har(const Mat& src)
     return (src.cols*src.rows)/har;
 }
 
-void HarmonicMeanFilter(const Mat& input, const Size kernalSize, Mat& output)
+void HarmonicMeanFilter(const Mat& input, const Size& kernalSize, Mat& output)
 {
     std::vector<cv::Mat> rgbChannels(input.channels());
     split(input, rgbChannels);
@@ -55,7 +55,7 @@ int  main(int argc, char** argv)
     namedWindow("Gaussian Noise", 0);
     namedWindow("Harmonic Mean Filter", 0);
 
-    Mat HarmonicMeanImg = Mat::zeros(image.size(), image.type());   //几何均值滤波后的图像
+    Mat HarmonicMeanImg = Mat::zeros(image.size(), image.type());   //谐波均值滤波后的图像
     HarmonicMeanFilter(image, Size(3, 3),HarmonicMeanImg);
 
     imshow("Gaussian Noise", image);

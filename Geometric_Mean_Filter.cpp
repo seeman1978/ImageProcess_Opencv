@@ -10,46 +10,32 @@
 
 using namespace cv;
 
-void GeometricMeanFilter(const Mat& input, Mat& output)
+double filter_geo(const Mat& src)
 {
-    double power = 1.0 / 9.0, geo = 1.0;
+    //谐波滤波
+    double geo = 1.0;
+    for (int i =0; i < src.rows; ++i){
+        const uchar* data = src.ptr<uchar>(i);
+        for (int j =0; j < src.cols; ++j){
+            if (data[j]!=0) {
+                geo *= (double)(data[j]);
+            }
+        }
+    }
+    return pow(geo, (double)1/(src.rows*src.cols));
+}
 
-    for (int y = 0; y < input.rows; ++y) {
-        for (int x = 0; x < input.cols; ++x) {
-            for (int c = 0; c < input.channels(); ++c) {    //必须有channel，否则目标图像只有原图像的三分之一
-                if (y == 0 || x == 0 || y == input.rows-1 || x == input.cols - 1){
-                    output.at<Vec3b>(y, x)[c] = input.at<Vec3b>(y, x)[c];
-                } else{
-                    if (input.at<Vec3b>(y, x)[c] != 0) {
-                        geo = geo * input.at<Vec3b>(y, x)[c];
-                    }
-                    if (input.at<Vec3b>(y+1, x+1)[c] != 0) {
-                        geo = geo * input.at<Vec3b>(y+1, x+1)[c];
-                    }
-                    if (input.at<Vec3b>(y+1, x)[c] != 0) {
-                        geo = geo * input.at<Vec3b>(y+1, x)[c];
-                    }
-                    if (input.at<Vec3b>(y, x+1)[c] != 0) {
-                        geo = geo * input.at<Vec3b>(y, x+1)[c];
-                    }
-                    if (input.at<Vec3b>(y+1, x-1)[c] != 0) {
-                        geo = geo * input.at<Vec3b>(y+1, x-1)[c];
-                    }
-                    if (input.at<Vec3b>(y-1, x+1)[c] != 0) {
-                        geo = geo * input.at<Vec3b>(y-1, x+1)[c];
-                    }
-                    if (input.at<Vec3b>(y-1, x)[c] != 0) {
-                        geo = geo * input.at<Vec3b>(y-1, x)[c];
-                    }
-                    if (input.at<Vec3b>(y, x-1)[c] != 0) {
-                        geo = geo * input.at<Vec3b>(y, x-1)[c];
-                    }
-                    if (input.at<Vec3b>(y-1, x-1)[c] != 0) {
-                        geo = geo * input.at<Vec3b>(y-1, x-1)[c];
-                    }
-                    output.at<Vec3b>(y, x)[c] = saturate_cast<uchar>(pow(geo, power));
-                    geo = 1;
-                }
+void GeometricMeanFilter(const Mat& input, const Size kernalSize, Mat& output)
+{
+    std::vector<cv::Mat> rgbChannels(input.channels());
+    split(input, rgbChannels);
+
+    int l = (kernalSize.height-1)/2;
+    int w = (kernalSize.width-1)/2;
+    for (int i = l; i < input.rows-l; ++i){
+        for (int j =w; j < input.cols-w; ++j){
+            for (int ii =0;ii < input.channels(); ++ii){
+                output.at<Vec3b>(i,j)[ii] = saturate_cast<uchar>(filter_geo(rgbChannels[ii](Rect(j-w, i-l, kernalSize.width, kernalSize.height))));
             }
         }
     }
@@ -72,7 +58,7 @@ int  main(int argc, char** argv)
 
 
     Mat GeoMeanImg = Mat::zeros(image.size(), image.type());   //几何均值滤波后的图像
-    GeometricMeanFilter(image, GeoMeanImg);
+    GeometricMeanFilter(image, Size(3, 3), GeoMeanImg);
 
     Mat ArthMeanImg;    //算术均值滤波后的图像
     blur(image, ArthMeanImg, Size(3, 3));

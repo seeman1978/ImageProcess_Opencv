@@ -1,3 +1,0 @@
-/Users/wangqiang/CLionProjects/ImageProcess_Opencv/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/Users/wangqiang/CLionProjects/ImageProcess_Opencv/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/wangqiang/CLionProjects/ImageProcess_Opencv/cmake-build-debug/CMakeFiles/ImageProcess.dir

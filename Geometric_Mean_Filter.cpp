@@ -22,7 +22,8 @@ double filter_geo(const Mat& src)
             }
         }
     }
-    return pow(geo, (double)1/(src.rows*src.cols));
+    double result = pow(geo, (double)1/(src.rows*src.cols));
+    return result;
 }
 
 void GeometricMeanFilter(const Mat& input, const Size kernalSize, Mat& output)

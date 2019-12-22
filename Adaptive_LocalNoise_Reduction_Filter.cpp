@@ -15,7 +15,7 @@ using namespace cv;
 
 double filter_geo(const Mat& src)
 {
-    //谐波滤波
+    //几何均值滤波
     double geo = 1.0;
     for (int i =0; i < src.rows; ++i){
         const uchar* data = src.ptr<uchar>(i);
@@ -25,7 +25,8 @@ double filter_geo(const Mat& src)
             }
         }
     }
-    return pow(geo, (double)1/(src.rows*src.cols));
+    double result = pow(geo, (double)1/(src.rows*src.cols));
+    return result;
 }
 
 void GeometricMeanFilter(const Mat& input, const Size kernalSize, Mat& output)
@@ -62,10 +63,16 @@ double filter_AdaptiveLocal(double g, const Mat& src, double dVariance)
     std::vector<double> diff(V.size());
     std::transform(V.begin(), V.end(), diff.begin(), [mean](double x) { return x - mean; });
     double sq_sum = std::inner_product(diff.begin(), diff.end(), diff.begin(), 0.0);
-    double stdev = std::sqrt(sq_sum / (V.size()-1));    //计算局部方差
-
+    //double stdev = std::sqrt(sq_sum / (V.size()-1));    //计算局部方差
+    double stdev = sq_sum / (V.size()-1);    //计算局部方差
     double result;
-    result = g - dVariance * (g - mean)/stdev;
+    if (dVariance > stdev) {
+        result = mean;
+    }
+    else {
+        result = g - dVariance * (g - mean)/stdev;
+    }
+
     return result;
 }
 
@@ -103,7 +110,7 @@ int  main(int argc, char** argv)
     Mat MeanImg = Mat::zeros(image.size(), image.type());   //自适应局部降低噪声均值滤波后的图像
     AdaptiveLocalFilter(image, Size(7, 7), 1000.0, MeanImg);
 
-    Mat geoBlurImg;  //几何均值滤波后的图像
+    Mat geoBlurImg = Mat::zeros(image.size(), image.type());   //几何均值滤波后的图像
     GeometricMeanFilter(image, Size(7, 7), geoBlurImg);
 
     imshow("Gaussian Noise", image);

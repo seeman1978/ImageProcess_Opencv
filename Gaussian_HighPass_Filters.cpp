@@ -187,7 +187,7 @@ int main(int argc, char** argv)
             mulSpectrums(complexImg, filter, complexImg, 0);
             shiftDFT(complexImg);
 
-            // create magnitude spectrum for display
+            /// create magnitude spectrum for display
             mag = create_spectrum_magnitude_display(complexImg, true);
 
             /// do inverse DFT on filtered image

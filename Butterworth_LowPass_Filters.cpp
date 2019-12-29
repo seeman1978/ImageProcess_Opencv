@@ -115,7 +115,7 @@ int main(int argc, char** argv)
 
     int N, M; /// fourier image sizes
 
-    int radius = 30;				// low pass filter parameter
+    int radius = 30;			// low pass filter parameter
     int order = 2;				// low pass filter parameter
 
     const string originalName = "Input Image (grayscale)"; // window name

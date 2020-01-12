@@ -65,9 +65,18 @@ int main( int argc, char** argv )
 void Erosion( int, void* )
 {
     int erosion_type;
-    if( erosion_elem == 0 ){ erosion_type = MORPH_RECT; }
-    else if( erosion_elem == 1 ){ erosion_type = MORPH_CROSS; }
-    else if( erosion_elem == 2) { erosion_type = MORPH_ELLIPSE; }
+    if( erosion_elem == 0 )
+    {
+        erosion_type = MORPH_RECT;
+    }
+    else if( erosion_elem == 1 )
+    {
+        erosion_type = MORPH_CROSS;
+    }
+    else if( erosion_elem == 2)
+    {
+        erosion_type = MORPH_ELLIPSE;
+    }
 
     Mat element = getStructuringElement( erosion_type,
                                          Size( 2*erosion_size + 1, 2*erosion_size+1 ),
@@ -82,9 +91,18 @@ void Erosion( int, void* )
 void Dilation( int, void* )
 {
     int dilation_type;
-    if( dilation_elem == 0 ){ dilation_type = MORPH_RECT; }
-    else if( dilation_elem == 1 ){ dilation_type = MORPH_CROSS; }
-    else if( dilation_elem == 2) { dilation_type = MORPH_ELLIPSE; }
+    if( dilation_elem == 0 )
+    {
+        dilation_type = MORPH_RECT;
+    }
+    else if( dilation_elem == 1 )
+    {
+        dilation_type = MORPH_CROSS;
+    }
+    else if( dilation_elem == 2)
+    {
+        dilation_type = MORPH_ELLIPSE;
+    }
 
     Mat element = getStructuringElement( dilation_type,
                                          Size( 2*dilation_size + 1, 2*dilation_size+1 ),

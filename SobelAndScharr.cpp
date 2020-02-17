@@ -20,7 +20,15 @@ int  main(int argc, char** argv)
         std::cout << "Usage: " << argv[0] << " <Input image>" << std::endl;
         return -1;
     }
-    resize(image, image, cv::Size(), 0.4, 0.4);
+    /// 创建显示窗口
+    namedWindow( "Original Image", 0 );
+    namedWindow( "Sobel X Image", 0 );
+    namedWindow( "Sobel Y Image", 0 );
+    namedWindow( "Sobel grad Image", 0 );
+    namedWindow( "Scharr X Image", 0 );
+    namedWindow( "Scharr Y Image", 0 );
+    namedWindow( "Scharr grad Image", 0 );
+
     int scale = 1;
     int delta = 0;
     int ddepth = CV_16S;
@@ -61,8 +69,12 @@ int  main(int argc, char** argv)
 
 
     imshow("Original Image", image);
-    imshow("Sobel Image", grad_Sobel);
-    imshow("Scharr Image", grad_Scharr);
+    imshow("Sobel X Image", abs_grad_x);
+    imshow("Sobel Y Image", abs_grad_y);
+    imshow("Sobel grad Image", grad_Sobel);
+    imshow("Scharr X Image", abs_grad_x_Scharr);
+    imshow("Scharr Y Image", abs_grad_y_Scharr);
+    imshow("Scharr grad Image", grad_Scharr);
     waitKey();
     return 0;
 }

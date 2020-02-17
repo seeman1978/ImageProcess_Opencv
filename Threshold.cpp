@@ -63,7 +63,7 @@ void Threshold_Demo( int, void* )
        4: Threshold to Zero Inverted
      */
 
-    threshold( src_gray, dst, threshold_value, max_BINARY_value,threshold_type );
+    threshold( src_gray, dst, threshold_value, max_BINARY_value, threshold_type );
 
     imshow( window_name, dst );
 }

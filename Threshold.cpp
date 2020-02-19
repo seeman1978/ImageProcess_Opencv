@@ -10,9 +10,9 @@
 using namespace cv;
 
 int threshold_value = 0;
-int threshold_type = 3;
+int threshold_type = 8;
 int const max_value = 255;
-int const max_type = 4;
+int const max_type = 16;
 int const max_BINARY_value = 255;
 
 Mat src, src_gray, dst;
@@ -56,11 +56,15 @@ int main(int argc, char** argv)
  */
 void Threshold_Demo( int, void* )
 {
-    /* 0: Binary
-       1: Binary Inverted
-       2: Threshold Truncated
-       3: Threshold to Zero
-       4: Threshold to Zero Inverted
+    /*
+    THRESH_BINARY     = 0, //!< \f[\texttt{dst} (x,y) =  \fork{\texttt{maxval}}{if \(\texttt{src}(x,y) > \texttt{thresh}\)}{0}{otherwise}\f]
+    THRESH_BINARY_INV = 1, //!< \f[\texttt{dst} (x,y) =  \fork{0}{if \(\texttt{src}(x,y) > \texttt{thresh}\)}{\texttt{maxval}}{otherwise}\f]
+    THRESH_TRUNC      = 2, //!< \f[\texttt{dst} (x,y) =  \fork{\texttt{threshold}}{if \(\texttt{src}(x,y) > \texttt{thresh}\)}{\texttt{src}(x,y)}{otherwise}\f]
+    THRESH_TOZERO     = 3, //!< \f[\texttt{dst} (x,y) =  \fork{\texttt{src}(x,y)}{if \(\texttt{src}(x,y) > \texttt{thresh}\)}{0}{otherwise}\f]
+    THRESH_TOZERO_INV = 4, //!< \f[\texttt{dst} (x,y) =  \fork{0}{if \(\texttt{src}(x,y) > \texttt{thresh}\)}{\texttt{src}(x,y)}{otherwise}\f]
+    THRESH_MASK       = 7,
+    THRESH_OTSU       = 8, //!< flag, use Otsu algorithm to choose the optimal threshold value
+    THRESH_TRIANGLE   = 16 //!< flag, use Triangle algorithm to choose the optimal threshold value
      */
 
     threshold( src_gray, dst, threshold_value, max_BINARY_value, threshold_type );

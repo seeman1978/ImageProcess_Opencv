@@ -66,7 +66,7 @@ void Threshold_Demo( int, void* )
     THRESH_OTSU       = 8, //!< flag, use Otsu algorithm to choose the optimal threshold value
     THRESH_TRIANGLE   = 16 //!< flag, use Triangle algorithm to choose the optimal threshold value
      */
-
+    blur(src_gray, src_gray, Size(5, 5));   /// 均值平滑去燥
     threshold( src_gray, dst, threshold_value, max_BINARY_value, threshold_type );
 
     imshow( window_name, dst );

@@ -59,7 +59,7 @@ int main( int argc, char** argv )
         return 0;
     }
     help(argv);
-    namedWindow( "image", 1 );
+    namedWindow( "image", 0 );
     img0.copyTo(img);
     cvtColor(img, markerMask, COLOR_BGR2GRAY);
     cvtColor(markerMask, imgGray, COLOR_GRAY2BGR);

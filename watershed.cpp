@@ -60,6 +60,7 @@ int main( int argc, char** argv )
     }
     help(argv);
     namedWindow( "image", 0 );
+    namedWindow( "watershed transform", 0 );
     img0.copyTo(img);
     cvtColor(img, markerMask, COLOR_BGR2GRAY);
     cvtColor(markerMask, imgGray, COLOR_GRAY2BGR);

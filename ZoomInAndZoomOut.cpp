@@ -21,14 +21,18 @@ int  main(int argc, char** argv)
         return -1;
     }
 
+    namedWindow("Original Image", 0);
+    namedWindow("Resample Image", 0);
+    namedWindow("Blur Resample Image", 0);
+
     Mat imgZoomOut;
-    resize(image, imgZoomOut, cv::Size(), 0.75, 0.75);
-    resize(imgZoomOut, imgZoomOut, cv::Size(), 1.33, 1.33);
+    resize(image, imgZoomOut, cv::Size(), 0.45, 0.45,  INTER_AREA );
+    //resize(imgZoomOut, imgZoomOut, cv::Size(), 1.33, 1.33);
 
     Mat imgZoomOutBlur;
     blur(image, imgZoomOutBlur, Size(5, 5));
-    resize(imgZoomOutBlur, imgZoomOutBlur, cv::Size(), 0.75, 0.75);
-    resize(imgZoomOutBlur, imgZoomOutBlur, cv::Size(), 1.33, 1.33);
+    resize(imgZoomOutBlur, imgZoomOutBlur, cv::Size(), 0.75, 0.75,  INTER_AREA );
+    //resize(imgZoomOutBlur, imgZoomOutBlur, cv::Size(), 1.33, 1.33);
 
     imshow("Original Image", image);
     imshow("Resample Image", imgZoomOut);

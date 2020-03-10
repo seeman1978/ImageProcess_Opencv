@@ -152,6 +152,6 @@ static void onChange(int , void* userInput)
     // filtering (stop)
     imgOut.convertTo(imgOut, CV_8U);
     normalize(imgOut, imgOut, 0, 255, NORM_MINMAX);
-//    imwrite("result.jpg", imgOut);
+    //imwrite("result.jpg", imgOut);
     imshow("inverse", imgOut);
 }

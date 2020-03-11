@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 project(ImageProcess)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 set(OpenCV_DIR /Users/wangqiang/opencv/installation/OpenCV-master/lib/cmake/opencv4)
 
@@ -9,7 +9,7 @@ find_package(OpenCV REQUIRED)
 
 include_directories(SYSTEM ${OpenCV_INCLUDE_DIRS})
 
-add_executable(ImageProcess Statistics_Moments.cpp)
+add_executable(ImageProcess connected_components.cpp)
 
 # add libs you need
 set(OpenCV_LIBS opencv_core opencv_imgproc opencv_highgui opencv_imgcodecs opencv_video opencv_ximgproc)

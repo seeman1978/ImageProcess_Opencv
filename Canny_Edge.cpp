@@ -33,10 +33,10 @@ static void onTrackbar(int, void*)
     imshow(window_name1, cedge);
 
     /// Canny detector with scharr
-    Mat dx,dy;
-    Scharr(blurImage,dx,CV_16S,1,0);
-    Scharr(blurImage,dy,CV_16S,0,1);
-    Canny( dx,dy, edge2, edgeThreshScharr, edgeThreshScharr*3 );
+    Mat dx, dy;
+    Scharr(blurImage, dx, CV_16S, 1, 0);
+    Scharr(blurImage, dy, CV_16S, 0, 1);
+    Canny(dx, dy, edge2, edgeThreshScharr, edgeThreshScharr*3 );
     /// Using Canny's output as a mask, we display our result
     cedge = Scalar::all(0);
     image.copyTo(cedge, edge2);
@@ -76,8 +76,8 @@ int main( int argc, const char** argv )
     namedWindow(window_name2, 1);
 
     // create a toolbar
-    createTrackbar("Canny threshold default", window_name1, &edgeThresh, 100, onTrackbar);
-    createTrackbar("Canny threshold Scharr", window_name2, &edgeThreshScharr, 400, onTrackbar);
+    createTrackbar("Canny threshold default", window_name1, &edgeThresh, 300, onTrackbar);
+    createTrackbar("Canny threshold Scharr", window_name2, &edgeThreshScharr, 600, onTrackbar);
 
     // Show the image
     onTrackbar(0, 0);

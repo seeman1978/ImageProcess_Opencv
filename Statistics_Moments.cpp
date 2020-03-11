@@ -56,8 +56,8 @@ int main(int argc, char** argv)
 void thresh_callback(int, void*)
 {
     Mat canny_output;
-    vector<vector<Point>>contours;
-    vector<Vec4i>hierarchy;
+    vector< vector<Point> > contours;
+    vector<Vec4i> hierarchy;
 
     //canny边缘检测
     Canny(grayImage, canny_output, thresh, thresh * 2, 3);
@@ -65,7 +65,7 @@ void thresh_callback(int, void*)
     findContours(canny_output, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE, Point(0, 0));
 
     //计算图像矩
-    vector<Moments>mu(contours.size());
+    vector<Moments> mu(contours.size());
     for (int i = 0; i < contours.size(); i++)
     {
         mu[i] = moments(contours[i], false);

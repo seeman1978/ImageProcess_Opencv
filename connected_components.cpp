@@ -61,6 +61,8 @@ void LargestConnecttedComponent(const Mat& src, Mat &dstImage)
     /// 求最大连通域的中心坐标
     /*auto [ cx, cy ] = centroid(contours[max_idx]);
     circle(drawing, Point(cx, cy), 5, Scalar(255,0,255));*/
+
+    drawing.copyTo(dstImage);
 }
 
 void LargestConnecttedComponent2(const Mat& src, Mat &dstImage)
@@ -152,7 +154,7 @@ void onTrackbar2( int, void* )
 
     //轮廓提取
     Mat dstImage;
-    LargestConnecttedComponent2(dst, dstImage);
+    LargestConnecttedComponent(dst, dstImage);
 
     imshow("source", srcImage);
     imshow("gray", dstImage);

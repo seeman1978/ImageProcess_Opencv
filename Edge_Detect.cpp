@@ -77,7 +77,7 @@ static void findSquares( const Mat& image, vector<vector<Point> >& squares )
             {
                 // approximate contour with accuracy proportional
                 // to the contour perimeter
-                approxPolyDP(contours[i], approx, 3, true);
+                approxPolyDP(contours[i], approx, 1, true);
                 squares.push_back(approx);
             }
         }

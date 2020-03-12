@@ -77,8 +77,6 @@ void LargestConnecttedComponent2(const Mat& src, Mat &dstImage)
     int n_comps = connectedComponents(temp, labels, 8, CV_16U);
     vector<int> histogram_of_labels(n_comps, 0);    ///初始化labels的个数为0
 
-    int rows = labels.rows;
-    int cols = labels.cols;
     for (int row = 0; row < labels.rows; row++) //计算每个labels的个数
     {
         for (int col = 0; col < labels.cols; col++)
@@ -93,9 +91,9 @@ void LargestConnecttedComponent2(const Mat& src, Mat &dstImage)
     int max_idx = std::distance(histogram_of_labels.begin(), result);
 
     //3. 将最大连通域标记为1
-    for (int row = 0; row < rows; row++)
+    for (int row = 0; row < labels.rows; row++)
     {
-        for (int col = 0; col < cols; col++)
+        for (int col = 0; col < labels.cols; col++)
         {
             if (labels.at<unsigned short>(row, col) == max_idx)
             {

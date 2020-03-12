@@ -1,0 +1,6 @@
+/Users/wangqiang/Downloads/DIP3E_CH11_Original_Images/Fig1138(a)(WashingtonDC_Band1_564).tif
+/Users/wangqiang/Downloads/DIP3E_CH11_Original_Images/Fig1138(b)(WashingtonDC_Band2_564).tif
+/Users/wangqiang/Downloads/DIP3E_CH11_Original_Images/Fig1138(c)(WashingtonDC_Band3_564).tif
+/Users/wangqiang/Downloads/DIP3E_CH11_Original_Images/Fig1138(d)(WashingtonDC_Band4_564).tif
+/Users/wangqiang/Downloads/DIP3E_CH11_Original_Images/Fig1138(e)(WashingtonDC_Band5_564).tif
+/Users/wangqiang/Downloads/DIP3E_CH11_Original_Images/Fig1138(f)(WashingtonDC_Band6_564).tif

@@ -38,7 +38,7 @@ int  main(int argc, char** argv)
     }
 
     ///创建SIFT特征检测器
-    cv::Ptr<cv::xfeatures2d::SIFT> mySIFT = cv::xfeatures2d::SIFT::create();
+    cv::Ptr<cv::xfeatures2d::SURF> mySURF = cv::xfeatures2d::SURF::create();
 
     ///特征点提取与描述子生成
     //特征点
@@ -46,8 +46,8 @@ int  main(int argc, char** argv)
     //特征描述子
     cv::Mat desp1, desp2;
 
-    mySIFT->detectAndCompute(image1, cv::Mat(), keyPoint1, desp1);
-    mySIFT->detectAndCompute(image2, cv::Mat(), keyPoint2, desp2);
+    mySURF->detectAndCompute(image1, cv::Mat(), keyPoint1, desp1);
+    mySURF->detectAndCompute(image2, cv::Mat(), keyPoint2, desp2);
 
     /// 暴力匹配
     cv::Ptr<cv::DescriptorMatcher> myFB = cv::DescriptorMatcher::create("FlannBased");

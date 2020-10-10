@@ -33,7 +33,7 @@ double filter_min(const Mat& src)
         const uchar* data = src.ptr<uchar>(i);
         for (int j =0; j < src.cols; ++j){
             if (data[j] < har) {
-                har = data[j];
+                har = data[j];l
             }
         }
     }
